@@ -223,27 +223,29 @@ void write_line_mud(struct session *ses, char *line, int size)
 		return;
 	}
 
-	if (!HAS_BIT(ses->telopts, TELOPT_FLAG_TELNET) && HAS_BIT(ses->charset, CHARSET_FLAG_ALL_TOUTF8))
-	{
-		char buf[BUFFER_SIZE];
-
-		size = utf8_to_all(ses, line, buf);
-
-		strcpy(line, buf);
-	}
-
 	check_all_events(ses, SUB_ARG|SUB_SEC, 0, 2, "SEND OUTPUT", line, ntos(size));
 
 	if (!check_all_events(ses, SUB_ARG|SUB_SEC, 0, 2, "CATCH SEND OUTPUT", line, ntos(size)))
 	{
-		if (ses->mccp3)
+        char buf[BUFFER_SIZE];
+
+        char *buf_pointer = line;
+        int buf_size = size;
+
+        if (!HAS_BIT(ses->telopts, TELOPT_FLAG_TELNET) && HAS_BIT(ses->charset, CHARSET_FLAG_ALL_TOUTF8))
+        {
+            buf_size = utf8_to_all(ses, line, buf);
+            buf_pointer = buf;
+        }
+
+	    if (ses->mccp3)
 		{
-			result = client_write_compressed(ses, line, size);
+			result = client_write_compressed(ses, buf_pointer, buf_size);
 		}
 #ifdef HAVE_GNUTLS_H
 		else if (ses->ssl)
 		{
-			result = gnutls_record_send(ses->ssl, line, size);
+			result = gnutls_record_send(ses->ssl, buf_pointer, buf_size);
 
 			while (result == GNUTLS_E_INTERRUPTED || result == GNUTLS_E_AGAIN)
 			{
@@ -253,7 +255,7 @@ void write_line_mud(struct session *ses, char *line, int size)
 #endif
 		else
 		{
-			result = write(ses->socket, line, size);
+			result = write(ses->socket, buf_pointer, buf_size);
 
 			if (result == -1)
 			{
