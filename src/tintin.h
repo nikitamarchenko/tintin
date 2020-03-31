@@ -357,10 +357,11 @@ enum operators
 #define CHARSET_FLAG_ISO1TOUTF8           BV07
 #define CHARSET_FLAG_ISO2TOUTF8           BV08
 #define CHARSET_FLAG_KOI8TOUTF8           BV09
+#define CHARSET_FLAG_CP1251TOUTF8         BV10
 
 
 #define CHARSET_FLAG_EUC                  CHARSET_FLAG_BIG5|CHARSET_FLAG_GBK1
-#define CHARSET_FLAG_ALL_TOUTF8           CHARSET_FLAG_BIG5TOUTF8|CHARSET_FLAG_FANSITOUTF8|CHARSET_FLAG_GBK1TOUTF8|CHARSET_FLAG_ISO1TOUTF8|CHARSET_FLAG_ISO2TOUTF8|CHARSET_FLAG_KOI8TOUTF8
+#define CHARSET_FLAG_ALL_TOUTF8           CHARSET_FLAG_BIG5TOUTF8|CHARSET_FLAG_FANSITOUTF8|CHARSET_FLAG_GBK1TOUTF8|CHARSET_FLAG_ISO1TOUTF8|CHARSET_FLAG_ISO2TOUTF8|CHARSET_FLAG_KOI8TOUTF8|CHARSET_FLAG_CP1251TOUTF8
 #define CHARSET_FLAG_ALL                  CHARSET_FLAG_UTF8|CHARSET_FLAG_ALL_TOUTF8|CHARSET_FLAG_EUC
 
 
@@ -2903,6 +2904,8 @@ extern int iso2_to_utf8(char *input, char *output);
 extern int utf8_to_iso2(char *input, char *output);
 extern int koi8_to_utf8(char *input, char *output);
 extern int utf8_to_koi8(char *input, char *output);
+extern int cp1251_to_utf8(char *input, char *output);
+extern int utf8_to_cp1251(char *input, char *output);
 extern int fansi_to_utf8(char *input, char *output);
 extern int is_euc_head(struct session *ses, char *str);
 extern int get_euc_size(struct session *ses, char *str);
