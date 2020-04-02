@@ -162,7 +162,7 @@
 #define HISTORY_FILE         "history.txt"
 
 #define STRING_SIZE                  50000
-#define BUFFER_SIZE                  24000
+#define BUFFER_SIZE                  24000*10
 #define INPUT_SIZE                   10000
 #define STACK_SIZE                    1000
 #define NUMBER_SIZE                    100
